@@ -53,32 +53,11 @@ namespace EAP_Exam_2
             }
         }
 
-       
-
-        private CloudStorageAccount CreateStorageAccount()
-        {
-            var localSettings = ApplicationData.Current.LocalSettings;
-
-            CloudStorageAccount storageAccount;
-            try
-            {
-                storageAccount = CloudStorageAccount.Parse(connectionString);
-            }
-            catch (FormatException)
-            {
-                throw new FormatException("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the application.");
-            }
-            catch (ArgumentException)
-            {
-                throw new ArgumentException("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
-            }
-
-            return storageAccount;
-        }
-
         private async void UploadImg(StorageFile file)
         {
-            CloudStorageAccount storageAccount = CreateStorageAccount();
+            var localSettings = ApplicationData.Current.LocalSettings;
+            CloudStorageAccount storageAccount;
+            storageAccount = CloudStorageAccount.Parse(connectionString);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("imgcontainer");
             await container.CreateIfNotExistsAsync();
